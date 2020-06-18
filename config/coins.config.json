@@ -1,0 +1,402 @@
+{
+    "base_currency": "USD",
+
+    "coins": [
+        {
+            "id": "BTC",
+            "title": "Bitcoin",
+            "code": "BTC",
+            "type": "CoinType.Bitcoin"
+        },
+        {
+            "id": "LTC",
+            "title": "Litecoin",
+            "code": "LTC",
+            "type": "CoinType.Litecoin"
+        },
+        {
+            "id": "ETH",
+            "title": "Ethereum",
+            "code": "ETH",
+            "type": "CoinType.Ethereum"
+        },
+        {
+            "id": "BCH",
+            "title": "Bitcoin Cash",
+            "code": "BCH",
+            "type": "CoinType.BitcoinCash"
+        },
+        {
+            "id": "DASH",
+            "title": "Dash",
+            "code": "DASH",
+            "type": "CoinType.Dash"
+        },
+        {
+            "id": "BNB",
+            "title": "Binance DEX",
+            "code": "BNB",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "EOS",
+            "title": "EOS",
+            "code": "EOS",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "ZRX",
+            "title": "0x Protocol",
+            "code": "ZRX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "ELF",
+            "title": "Aelf",
+            "code": "ELF",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "ANKR",
+            "title": "Ankr Network",
+            "code": "ANKR",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "BNT",
+            "title": "Bancor",
+            "code": "BNT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "BAT",
+            "title": "Basic Attention Token",
+            "code": "BAT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "BNB-ERC20",
+            "title": "Binance ERC20",
+            "code": "BNB",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "BUSD",
+            "title": "Binance USD",
+            "code": "BUSD",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "BTCB",
+            "title": "Bitcoin BEP2",
+            "code": "BTCB",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "CAS",
+            "title": "Cashaaa",
+            "code": "CAS",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "LINK",
+            "title": "Chainlink",
+            "code": "LINK",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "MCO",
+            "title": "MCO",
+            "code": "MCO",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "CRO",
+            "title": "Crypto.com Coin",
+            "code": "CRO",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "CRPT",
+            "title": "Crypterium",
+            "code": "CRPT",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "DAI",
+            "title": "Dai",
+            "code": "DAI",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "MANA",
+            "title": "Decentraland",
+            "code": "MANA",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "DGD",
+            "title": "DigixDAO",
+            "code": "DGD",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "DGX",
+            "title": "Digix Gold Token",
+            "code": "DGX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "ENJ",
+            "title": "EnjinCoin",
+            "code": "ENJ",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "EOSDT",
+            "title": "EOSDT",
+            "code": "EOSDT",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "IQ",
+            "title": "Everipedia",
+            "code": "IQ",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "GUSD",
+            "title": "Gemini Dollar",
+            "code": "GUSD",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "GNT",
+            "title": "Golem",
+            "code": "GNT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "GTO",
+            "title": "Gifto",
+            "code": "GTO",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "HOT",
+            "title": "Holo",
+            "code": "HOT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "HT",
+            "title": "Huobi Token",
+            "code": "HT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "IDEX",
+            "title": "IDEX",
+            "code": "IDEX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "IDXM",
+            "title": "IDEX Membership",
+            "code": "IDXM",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "KCS",
+            "title": "KuCoin Shares",
+            "code": "KCS",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "KNC",
+            "title": "Kyber Network Crystal",
+            "code": "KNC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "LOOM",
+            "title": "Loom Network",
+            "code": "LOOM",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "LRC",
+            "title": "Loopring",
+            "code": "LRC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "MKR",
+            "title": "Maker",
+            "code": "MKR",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "MEETONE",
+            "title": "MEET.ONE",
+            "code": "MEETONE",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "MITH",
+            "title": "Mithril",
+            "code": "MITH",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "NEXO",
+            "title": "Nexo",
+            "code": "NEXO",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "NDX",
+            "title": "Newdex",
+            "code": "NDX",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "NUT",
+            "title": "Native Utility Token",
+            "code": "NUT",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "OMG",
+            "title": "OmiseGO",
+            "code": "OMG",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "ORBS",
+            "title": "Orbs",
+            "code": "ORBS",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "PGL",
+            "title": "Prospectors Gold",
+            "code": "PGL",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "PAX",
+            "title": "Paxos Standard",
+            "code": "PAX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "PAXG",
+            "title": "PAX Gold",
+            "code": "PAXG",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "POLY",
+            "title": "Polymath",
+            "code": "POLY",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "PPT",
+            "title": "Populous",
+            "code": "PPT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "PTI",
+            "title": "Paytomat",
+            "code": "PTI",
+            "type": "CoinType.Eos"
+        },
+        {
+            "id": "NPXS",
+            "title": "Pundi X",
+            "code": "NPXS",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "REP",
+            "title": "Augur",
+            "code": "REP",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "R",
+            "title": "Revain",
+            "code": "R",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "XRP",
+            "title": "Ripple BEP2",
+            "code": "XRP",
+            "type": "CoinType.Binance"
+        },
+        {
+            "id": "EURS",
+            "title": "STASIS EURO",
+            "code": "EURS",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "SAI",
+            "title": "Sai",
+            "code": "SAI",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "SNT",
+            "title": "Status",
+            "code": "SNT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "SNX",
+            "title": "Synthetix",
+            "code": "SNX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "TUSD",
+            "title": "TrueUSD",
+            "code": "tUSD",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "USDT",
+            "title": "Tether USD",
+            "code": "USDT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "USDC",
+            "title": "USD Coin",
+            "code": "USDC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "WTC",
+            "title": "Waltonchain",
+            "code": "WTC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "WBTC",
+            "title": "Wrapped Bitcoin",
+            "code": "WBTC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "WETH",
+            "title": "Wrapped Ethereum",
+            "code": "WETH",
+            "type": "CoinType.Erc20"
+        }
+    ]
+}

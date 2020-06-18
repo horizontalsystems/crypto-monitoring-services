@@ -1,0 +1,38 @@
+{
+    "development": {
+        "service_providers": {
+            "horsys_messaging_services": {
+                "username": "admin",
+                "password": "secret",
+                "api_url": "http://localhost:5000/api/v1/"
+            },
+            "crypto_compare": {
+                "api_key": "859b2883db013cb5cf28fdee51cb41d0d65887b8831caf5e769a6580df41a338"
+            }
+        }
+    },
+    "test": {
+        "service_providers": {
+            "horsys_messaging_services": {
+                "username": "admin",
+                "password": "secret",
+                "api_url": "http://localhost:5000/api/v1/"
+            },
+            "crypto_compare": {
+                "api_key": "859b2883db013cb5cf28fdee51cb41d0d65887b8831caf5e769a6580df41a338"
+            }
+        }
+    },
+    "production": {
+        "service_providers": {
+            "horsys_messaging_services": {
+                "username": "admin",
+                "password": "secret",
+                "api_url": "http://localhost:5000/api/v1/"
+            },
+            "crypto_compare": {
+                "api_key": "859b2883db013cb5cf28fdee51cb41d0d65887b8831caf5e769a6580df41a338"
+            }
+        }
+    }
+}

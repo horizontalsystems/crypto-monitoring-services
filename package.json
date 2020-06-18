@@ -1,0 +1,26 @@
+{
+  "name": "io.horizontalsystems.cms",
+  "version": "0.0.1",
+  "description": "",
+  "main": "bin/app.js",
+  "bin": {
+    "io.horizontalsystems.ims": "app.js"
+  },
+  "scripts": {
+    "debug": "node --inspect -r esm bin/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.21.2"
+  },
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "cryptocompare": "^1.0.0",
+    "esm": "^3.2.25",
+    "node-fetch": "^2.6.0",
+    "winston": "^3.2.1"
+  }
+}
