@@ -1,7 +1,7 @@
 {
     "development": {
         "service_providers": {
-            "horsys_messaging_services": {
+            "push_notififaction_provider": {
                 "username": "admin",
                 "password": "secret",
                 "api_url": "http://localhost:5000/api/v1/"
@@ -13,7 +13,7 @@
     },
     "test": {
         "service_providers": {
-            "horsys_messaging_services": {
+            "push_notififaction_provider": {
                 "username": "admin",
                 "password": "secret",
                 "api_url": "http://localhost:5000/api/v1/"
@@ -25,7 +25,7 @@
     },
     "production": {
         "service_providers": {
-            "horsys_messaging_services": {
+            "push_notififaction_provider": {
                 "username": "admin",
                 "password": "secret",
                 "api_url": "http://localhost:5000/api/v1/"

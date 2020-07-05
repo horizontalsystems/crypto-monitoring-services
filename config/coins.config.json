@@ -99,6 +99,37 @@
             "type": "CoinType.Binance"
         },
         {
+            "id": "CVC",
+            "title": "Civic",
+            "code": "CVC",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "DNT",
+            "title": "District0x",
+            "code": "DNT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "OXT",
+            "title": "Orchid",
+            "code": "OXT",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "CHSB",
+            "title": "SwissBorg",
+            "code": "CHSB",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "ANT",
+            "title": "Aragon",
+            "code": "ANT",
+            "type": "CoinType.Erc20"
+        },
+
+        {
             "id": "LINK",
             "title": "Chainlink",
             "code": "LINK",
