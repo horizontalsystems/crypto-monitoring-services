@@ -17,9 +17,9 @@ class MessagingServiceProvider {
                 this.logger.info(err)
             })
 
-        const headers = {
-            'Content-Type': 'application/json'
-        }
+        // const headers = {
+        //     'Content-Type': 'application/json'
+        // }
     }
 
     getJWT(username, password) {
