@@ -3,7 +3,7 @@ import XRatesProvider from './providers/xrates/xrates.provider';
 import MessagingServiceProvider from './providers/messaging/messaging.provider';
 
 const CRON_DAILY_12AM = '0 0 0 * * *' // every day at 12:00 AM
-const CRON_EVERY_15M = '0 */3 * * * *' // every 10 minutes
+const CRON_EVERY_15M = '0 */15 * * * *' // every 10 minutes
 const XRATES_CHANGE_PERCENTAGES = [2, 5, 10]
 
 class MonitoringService {
