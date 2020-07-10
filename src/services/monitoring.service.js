@@ -20,7 +20,7 @@ class MonitoringService {
         );
 
         this.messagingProvider = new MessagingServiceProvider(
-            appConfig.service_providers.horsys_messaging_services,
+            appConfig.service_providers.push_notification_provider,
             logger
         );
 
@@ -44,7 +44,7 @@ class MonitoringService {
     async setDailyOpeningXRates() {
         this.dailyOpeningXRates = await this.xratesProvider.getXRates(this.supportedCoins, this.baseCurrency)
         this.logger.info('"Daily opening xrates" data collected')
-        //this.checkXRateChanges()
+        this.sendXRateChangeNotification('BTC', 2, 0.2)
     }
 
     async checkXRateChanges() {
@@ -81,7 +81,12 @@ class MonitoringService {
     }
 
     async sendXRateChangeNotification(coinCode, alertPercentage, changePercentage) {
+        const channelName = `${coinCode}_24hour_${alertPercentage}percent`
+        const title = coinCode
+        const body = `${coinCode} is ${changePercentage}`
+
         this.logger.info(`Send Notification\nCoin:${coinCode},Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.messagingProvider.sendNotificationToChannel(channelName, title, body)
     }
 }
 
