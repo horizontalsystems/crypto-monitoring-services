@@ -3,25 +3,29 @@ import XRatesProvider from './providers/xrates/xrates.provider';
 import MessagingServiceProvider from './providers/messaging/messaging.provider';
 
 const CRON_DAILY_12AM = '0 0 0 * * *' // every day at 12:00 AM
-const CRON_EVERY_15M = '0 */15 * * * *' // every 10 minutes
+const CRON_EVERY_15M = '0 */18 * * * *' // every 10 minutes
 const XRATES_CHANGE_PERCENTAGES = [2, 5, 10]
+const CHANGE_24H = 'change_24hour'
+const EMOJI_ARROW_UP = '\u2B06'
+const EMOJI_ARROW_DOWN = '\u2B07'
 
 class MonitoringService {
     constructor(appConfig, coinsConfig, logger) {
         this.logger = logger;
         this.appConfig = appConfig;
         this.coinsConfig = coinsConfig;
-        this.supportedCoins = coinsConfig.coins.map(coin => coin.code)
+        this.supportedCoins = coinsConfig.coins
+        this.supportedCoinCodes = this.supportedCoins.map(coin => coin.code)
         this.baseCurrency = coinsConfig.base_currency
         this.xratesProvider = new XRatesProvider(
-            appConfig,
-            coinsConfig,
-            logger
+            this.appConfig,
+            this.coinsConfig,
+            this.logger
         );
 
         this.messagingProvider = new MessagingServiceProvider(
-            appConfig.service_providers.push_notification_provider,
-            logger
+            this.appConfig.service_providers.push_notification_provider,
+            this.logger
         );
 
         this.setDailyOpeningXRates()
@@ -37,32 +41,34 @@ class MonitoringService {
         });
 
         cron.schedule(CRON_EVERY_15M, () => {
-            this.checkXRatesChanges()
+            this.checkXRateChanges24h()
         });
     }
 
     async setDailyOpeningXRates() {
-        this.dailyOpeningXRates = await this.xratesProvider.getXRates(this.supportedCoins, this.baseCurrency)
+        await new Promise(r => setTimeout(r, 2500));
+        this.dailyOpeningXRates = await this.xratesProvider.getXRates(this.supportedCoinCodes, this.baseCurrency)
         this.logger.info('"Daily opening xrates" data collected')
-        this.sendXRateChangeNotification('BTC', 2, 0.2)
     }
 
-    async checkXRateChanges() {
-        const latestXRates = await this.xratesProvider.getXRates(this.supportedCoins, this.baseCurrency)
+    async checkXRateChanges24h() {
+        const latestXRates = await this.xratesProvider.getXRates(this.supportedCoinCodes, this.baseCurrency)
+        this.logger.info('Checking 24hour price changes.')
 
         if (this.dailyOpeningXRates && latestXRates) {
             Object.values(this.dailyOpeningXRates).forEach(dailyOpeningXRate => {
-                const latestXRate = latestXRates.find(xrate => xrate.coinCode === dailyOpeningXRate.coinCode)
+                const latestXRate = latestXRates.find(xrate => xrate[0].coinCode === dailyOpeningXRate[0].coinCode)
                 if (latestXRate) {
                     const changePercentage = MonitoringService.calculateXRateChangePercentage(
-                        dailyOpeningXRate.rate,
-                        latestXRate.rate
+                        dailyOpeningXRate[0].rate,
+                        latestXRate[0].rate
                     )
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
                         if (percentage <= Math.abs(changePercentage)) {
                             this.sendXRateChangeNotification(
-                                dailyOpeningXRate.coinCode,
+                                dailyOpeningXRate[0].coinCode,
+                                CHANGE_24H,
                                 percentage,
                                 changePercentage
                             )
@@ -83,10 +89,26 @@ class MonitoringService {
     async sendXRateChangeNotification(coinCode, alertPercentage, changePercentage) {
         const channelName = `${coinCode}_24hour_${alertPercentage}percent`
         const title = coinCode
-        const body = `${coinCode} is ${changePercentage}`
+        const body = changePercentage
 
         this.logger.info(`Send Notification\nCoin:${coinCode},Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendNotificationToChannel(channelName, title, body)
+    }
+
+    async sendXRateChangeDataMessage(coinCode, change, alertPercentage, changePercentage) {
+        const channelName = `${coinCode}_24hour_${alertPercentage}percent`
+        const coinFound = this.supportedCoins.find(coin => coin.code === coinCode)
+        const emojiCode = changePercentage > 0 ? EMOJI_ARROW_UP : EMOJI_ARROW_DOWN
+        const changeDirection = changePercentage > 0 ? 'up' : 'down'
+        const args = [coinCode, changePercentage, emojiCode]
+        const data = {
+            'title-loc-key': coinFound.title,
+            'loc-key': `${change}_${changeDirection}`,
+            'loc-args': args
+        };
+
+        this.logger.info(`Send Notification\nCoin:${coinCode},Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.messagingProvider.sendDataMessageToChannel(channelName, data)
     }
 }
 

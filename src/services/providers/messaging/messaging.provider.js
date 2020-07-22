@@ -9,16 +9,12 @@ class MessagingServiceProvider {
 
         this.getJWT(this.config.username, this.config.password)
             .then(response => {
-                this.jwt = response
+                this.jwt = response.token
                 this.logger.info(`Response:${JSON.stringify(response.token)}`)
             })
             .catch(err => {
                 this.logger.info(err)
             })
-
-        // const headers = {
-        //     'Content-Type': 'application/json'
-        // }
     }
 
     async getJWT(username, password) {
@@ -43,6 +39,21 @@ class MessagingServiceProvider {
         });
 
         this.logger.info(`Notification sent, status: ${JSON.stringify(response)}`)
+
+        return response.status
+    }
+
+    async sendDataMessageToChannel(channelName, data) {
+        const url = `${this.apiUrl}admin/send/data/${channelName}`
+        const bearer = `Bearer ${this.jwt}`;
+        const response = await fetch(url, {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                Authorization: bearer,
+                'Content-Type': 'application/json'
+            }
+        });
 
         return response.status
     }

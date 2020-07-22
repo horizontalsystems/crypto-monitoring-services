@@ -16,28 +16,30 @@ class CryptoCompareProvider {
     }
 
     async getXRates(coinCodes, fiatCodes) {
-        let result;
+        let results = [];
         const maxLength = MAX_COINS_PER_REQUEST
 
         if (coinCodes.length > maxLength) {
             for (let i = 0; i <= coinCodes.length - 1; i += maxLength) {
                 const coinsSplitted = coinCodes.slice(i, i + maxLength)
-                const lastResult = await this.ccApi.priceMulti(coinsSplitted, fiatCodes)
+                const lastResult = this.ccApi.priceMulti(coinsSplitted, fiatCodes)
 
-                result = { ...result, ...lastResult }
+                results.push(lastResult)
             }
         } else {
-            result = await this.ccApi.priceMulti(coinCodes, fiatCodes)
+            results = this.ccApi.priceMulti(coinCodes, fiatCodes)
         }
 
-        return CryptoCompareProvider.convertPriceResponse(result)
+        return CryptoCompareProvider.convertPriceResponse(await Promise.all(results))
     }
 
     static convertPriceResponse(result) {
         if (result) {
             const xRates = Object.entries(result).map(
-                coinData => Object.entries(coinData[1]).map(
-                    fiatData => new XRate(coinData[0], fiatData[0], fiatData[1])
+                resultData => Object.entries(resultData[1]).map(
+                    coinData => Object.entries(coinData[1]).map(
+                        fiatData => new XRate(coinData[0], fiatData[0], fiatData[1])
+                    )
                 )
             )
 
