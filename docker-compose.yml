@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+    app:
+        container_name: crypto-mon
+        command: node -r esm bin/app.js
+        build:
+            context: '.'
+            dockerfile: './docker/Dockerfile'
+        ports:
+            - '3000:3000'
+        environment:
+            - NODE_ENV=production
+            - PORT=3000
+    
