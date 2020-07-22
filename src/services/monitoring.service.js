@@ -66,7 +66,7 @@ class MonitoringService {
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
                         if (percentage <= Math.abs(changePercentage)) {
-                            this.sendXRateChangeNotification(
+                            this.sendXRateChangeDataMessage(
                                 dailyOpeningXRate[0].coinCode,
                                 CHANGE_24H,
                                 percentage,
