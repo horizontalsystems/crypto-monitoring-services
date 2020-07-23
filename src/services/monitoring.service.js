@@ -98,7 +98,7 @@ class MonitoringService {
         )
 
         if (notified) {
-            this.logger(`CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
+            this.logger.info(`CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
             return true
         }
 
