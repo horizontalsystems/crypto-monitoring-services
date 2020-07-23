@@ -92,7 +92,7 @@ class MonitoringService {
         return Math.round(changePercentage * 10) / 10
     }
 
-    async isNotificationAlreadySent(coinCode, changePercentage) {
+    isNotificationAlreadySent(coinCode, changePercentage) {
         const notified = this.sentNotifications.find(
             notifData => coinCode === notifData.coinCode && notifData.changePercentage === changePercentage
         )
