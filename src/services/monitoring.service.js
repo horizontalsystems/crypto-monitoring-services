@@ -28,6 +28,7 @@ class MonitoringService {
             this.logger
         );
 
+        this.sentNotifications = []
         this.setDailyOpeningXRates()
     }
 
@@ -37,6 +38,7 @@ class MonitoringService {
 
     startXRatesMonitoringTask() {
         cron.schedule(CRON_DAILY_12AM, () => {
+            this.sentNotifications = []
             this.setDailyOpeningXRates()
         });
 
@@ -68,12 +70,14 @@ class MonitoringService {
                         if (percentage <= Math.abs(changePercentage)) {
                             this.logger.info(`Coin: ${dailyOpeningXRate[0].coinCode}, Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
 
-                            this.sendXRateChangeDataMessage(
-                                dailyOpeningXRate[0].coinCode,
-                                CHANGE_24H,
-                                percentage,
-                                changePercentage
-                            )
+                            if (!this.isNotificationAlreadySent(dailyOpeningXRate[0].coinCode, percentage)) {
+                                this.sendXRateChangeDataMessage(
+                                    dailyOpeningXRate[0].coinCode,
+                                    CHANGE_24H,
+                                    percentage,
+                                    changePercentage
+                                )
+                            }
                         }
                     });
                 }
@@ -86,6 +90,21 @@ class MonitoringService {
         const changePercentage = parseFloat((diff * 100) / Math.max(rateSource, rateTarget))
 
         return Math.round(changePercentage * 10) / 10
+    }
+
+    async isNotificationAlreadySent(coinCode, changePercentage) {
+        const notified = this.sentNotifications.find(
+            notifData => coinCode === notifData.coinCode && notifData.changePercentage === changePercentage
+        )
+
+        if (notified) {
+            this.logger(`CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
+            return true
+        }
+
+        this.sentNotifications.push({ coinCode, changePercentage })
+
+        return false
     }
 
     async sendXRateChangeNotification(coinCode, alertPercentage, changePercentage) {
