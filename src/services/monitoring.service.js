@@ -66,6 +66,9 @@ class MonitoringService {
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
                         if (percentage <= Math.abs(changePercentage)) {
+                            this.logger.info(`Coin: ${dailyOpeningXRate[0].coinCode}, 
+                            Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
+
                             this.sendXRateChangeDataMessage(
                                 dailyOpeningXRate[0].coinCode,
                                 CHANGE_24H,
@@ -81,7 +84,7 @@ class MonitoringService {
 
     static calculateXRateChangePercentage(rateSource, rateTarget) {
         const diff = rateSource - rateTarget
-        const changePercentage = parseFloat((diff * 100) / rateSource)
+        const changePercentage = parseFloat((diff * 100) / Math.max(rateSource, rateTarget))
 
         return Math.round(changePercentage * 10) / 10
     }
@@ -91,7 +94,7 @@ class MonitoringService {
         const title = coinCode
         const body = changePercentage
 
-        this.logger.info(`Send Notification\nCoin:${coinCode},Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`Send Notification Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendNotificationToChannel(channelName, title, body)
     }
 
@@ -107,7 +110,7 @@ class MonitoringService {
             'loc-args': args
         };
 
-        this.logger.info(`Send Notification\nCoin:${coinCode},Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`Send Notification Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendDataMessageToChannel(channelName, data)
     }
 }
