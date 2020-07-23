@@ -66,8 +66,7 @@ class MonitoringService {
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
                         if (percentage <= Math.abs(changePercentage)) {
-                            this.logger.info(`Coin: ${dailyOpeningXRate[0].coinCode}, 
-                            Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
+                            this.logger.info(`Coin: ${dailyOpeningXRate[0].coinCode}, Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
 
                             this.sendXRateChangeDataMessage(
                                 dailyOpeningXRate[0].coinCode,
@@ -83,7 +82,7 @@ class MonitoringService {
     }
 
     static calculateXRateChangePercentage(rateSource, rateTarget) {
-        const diff = rateSource - rateTarget
+        const diff = rateTarget - rateSource
         const changePercentage = parseFloat((diff * 100) / Math.max(rateSource, rateTarget))
 
         return Math.round(changePercentage * 10) / 10
