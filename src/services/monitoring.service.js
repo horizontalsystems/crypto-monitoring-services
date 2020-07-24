@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import cron from 'node-cron';
 import XRatesProvider from './providers/xrates/xrates.provider';
 import MessagingServiceProvider from './providers/messaging/messaging.provider';
@@ -87,7 +88,7 @@ class MonitoringService {
 
     static calculateXRateChangePercentage(rateSource, rateTarget) {
         const diff = rateTarget - rateSource
-        const changePercentage = parseFloat((diff * 100) / Math.max(rateSource, rateTarget))
+        const changePercentage = parseFloat((diff * 100) / rateSource)
 
         return Math.round(changePercentage * 10) / 10
     }
@@ -129,7 +130,10 @@ class MonitoringService {
         };
 
         this.logger.info(`Send Notification Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
-        this.messagingProvider.sendDataMessageToChannel(channelName, data)
+        const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
+        this.logger.info(`Response status: ${status}`)
+
+        return status
     }
 }
 
