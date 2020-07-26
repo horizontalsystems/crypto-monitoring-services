@@ -52,6 +52,7 @@ class MonitoringService {
         await new Promise(r => setTimeout(r, 2500));
         this.dailyOpeningXRates = await this.xratesProvider.getXRates(this.supportedCoinCodes, this.baseCurrency)
         this.logger.info('"Daily opening xrates" data collected')
+        this.sentNotifications = []
     }
 
     async checkXRateChanges24h() {
