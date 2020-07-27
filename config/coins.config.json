@@ -63,6 +63,12 @@
             "type": "CoinType.Binance"
         },
         {
+            "id": "AMPL",
+            "title": "Ampleforth",
+            "code": "AMPL",
+            "type": "CoinType.Erc20"
+        },
+        {
             "id": "BNT",
             "title": "Bancor",
             "code": "BNT",
