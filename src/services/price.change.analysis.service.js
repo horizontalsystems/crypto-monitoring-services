@@ -2,7 +2,7 @@
 import cron from 'node-cron';
 
 const CRON_DAILY_12AM = '0 0 0 * * *' // every day at 12:00 AM
-const CRON_EVERY_20M = '0 */2 * * * *' // every 20 minutes
+const CRON_EVERY_20M = '0 */20 * * * *' // every 20 minutes
 
 const XRATES_CHANGE_PERCENTAGES = [2, 5, 10]
 const CHANGE_24H = 'change_24hour'
