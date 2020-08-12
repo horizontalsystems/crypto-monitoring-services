@@ -75,6 +75,12 @@
             "type": "CoinType.Erc20"
         },
         {
+            "id": "BAL",
+            "title": "Balancer",
+            "code": "BAL",
+            "type": "CoinType.Erc20"
+        },
+        {
             "id": "BAT",
             "title": "Basic Attention Token",
             "code": "BAT",
@@ -134,7 +140,6 @@
             "code": "ANT",
             "type": "CoinType.Erc20"
         },
-
         {
             "id": "LINK",
             "title": "Chainlink",
@@ -364,6 +369,12 @@
             "type": "CoinType.Erc20"
         },
         {
+            "id": "REN",
+            "title": "Ren",
+            "code": "REN",
+            "type": "CoinType.Erc20"
+        },
+        {
             "id": "R",
             "title": "Revain",
             "code": "R",
@@ -397,6 +408,18 @@
             "id": "SNX",
             "title": "Synthetix",
             "code": "SNX",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "SWAP",
+            "title": "TrustSwap",
+            "code": "SWAP",
+            "type": "CoinType.Erc20"
+        },
+        {
+            "id": "TKN",
+            "title": "Monolith",
+            "code": "TKN",
             "type": "CoinType.Erc20"
         },
         {
