@@ -38,7 +38,7 @@ class MonitoringServer {
         this.http.listen(this.port);
         logger.info(`App started listening port:${this.port}`)
 
-        const monitoringService = new MonitoringService(appConfig, coinsConfig, logger);
+        const monitoringService = new MonitoringService(logger, appConfig, coinsConfig);
         monitoringService.start()
         logger.info('Monitoring service started successfully')
     }

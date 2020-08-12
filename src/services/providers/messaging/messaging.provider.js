@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 
 class MessagingServiceProvider {
-    constructor(messagingServiceConfig, logger) {
+    constructor(logger, messagingServiceConfig) {
         this.logger = logger
         this.config = messagingServiceConfig
         this.apiUrl = this.config.api_url
