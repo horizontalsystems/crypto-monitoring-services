@@ -42,7 +42,7 @@ class PriceChangeAnalysisService {
             this.supportedCoinCodes,
             this.baseCurrency
         )
-        this.logger.info('"Daily opening xrates" data collected')
+        this.logger.info('"[PriceChange] Daily opening xrates" data collected')
     }
 
     async checkXRateChanges(period) {
@@ -51,7 +51,7 @@ class PriceChangeAnalysisService {
             this.baseCurrency
         )
 
-        this.logger.info(`Checking ${period} price changes.`)
+        this.logger.info(`[PriceChange] Checking ${period} price changes.`)
 
         if (this.dailyOpeningXRates && latestXRates) {
             Object.values(this.dailyOpeningXRates).forEach(dailyOpeningXRate => {
@@ -64,7 +64,7 @@ class PriceChangeAnalysisService {
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
                         if (percentage <= Math.abs(changePercentage)) {
-                            this.logger.info(`Coin: ${dailyOpeningXRate[0].coinCode}, Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
+                            this.logger.info(`[PriceChange] Coin: ${dailyOpeningXRate[0].coinCode}, Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
 
                             if (!this.isNotificationAlreadySent(dailyOpeningXRate[0].coinCode, percentage)) {
                                 this.sendXRateChangeDataMessage(
@@ -94,7 +94,7 @@ class PriceChangeAnalysisService {
         )
 
         if (notified) {
-            this.logger.info(`CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
+            this.logger.info(`[PriceChange] CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
             return true
         }
 
@@ -108,7 +108,7 @@ class PriceChangeAnalysisService {
         const title = coinCode
         const body = changePercentage
 
-        this.logger.info(`Send PriceChange Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`[PriceChange] Send Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendNotificationToChannel(channelName, title, body)
     }
 
@@ -124,9 +124,9 @@ class PriceChangeAnalysisService {
             'loc-args': args
         };
 
-        this.logger.info(`Send PriceChange Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`[PriceChange] Send Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
-        this.logger.info(`Response status: ${status}`)
+        this.logger.info(`[PriceChange] Response status: ${status}`)
 
         return status
     }

@@ -53,6 +53,8 @@ class TrendingAnalysisService {
     }
 
     async checkTrendingChanges(trendTerm) {
+        this.logger.info(`[TrendChange] Started checking TrendingChanges" with Term:${trendTerm.trendState}`)
+
         const currentTime = Math.floor(new Date() / 1000)
 
         for (const coin of this.supportedCoins) {
@@ -75,7 +77,7 @@ class TrendingAnalysisService {
                 const foundTrendData = this.previousTrendResults[foundIndex]
 
                 if (foundTrendData.trend !== latestTrendData.trend && trend !== Trend.NEUTRAL) {
-                    this.logger.info(`Coin: ${coin.code}, Term:${trendTerm.trendState} Prev Trend:${foundTrendData.trend}, Latest Trend:${trend}`)
+                    this.logger.info(`[TrendChange] Coin: ${coin.code}, Term:${trendTerm.trendState} Prev Trend:${foundTrendData.trend}, Latest Trend:${trend}`)
                     this.sendTrendChangeDataMessage(coin.code, trendTerm.trendState, trend)
                 }
                 this.previousTrendResults[foundIndex] = latestTrendData
@@ -116,7 +118,7 @@ class TrendingAnalysisService {
         const trendDirection = trend.toLowerCase()
         const body = `${coinCode}_trend_${trendState}term_${trendDirection}`
 
-        this.logger.info(`Send TrendChange Notif:  Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`[TrendChange] Send TrendChange Notif:  Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
         this.messagingProvider.sendNotificationToChannel(channelName, coinFound.title, body)
     }
 
@@ -132,9 +134,9 @@ class TrendingAnalysisService {
             'loc-args': args
         };
 
-        this.logger.info(`Send TrendChange Notif: Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`[TrendChange] Send Notif: Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
-        this.logger.info(`Response status: ${status}`)
+        this.logger.info(`[TrendChange] Response status: ${status}`)
 
         return status
     }
