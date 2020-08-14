@@ -22,10 +22,11 @@ class PriceChangeAnalysisService {
         this.dataCollectorService = dataCollectorService
 
         this.sentNotifications = []
-        this.getDailyOpeningXRates()
     }
 
     start() {
+        this.getDailyOpeningXRates()
+
         cron.schedule(CRON_DAILY_12AM, () => {
             this.sentNotifications = []
             this.getDailyOpeningXRates()
@@ -107,7 +108,7 @@ class PriceChangeAnalysisService {
         const title = coinCode
         const body = changePercentage
 
-        this.logger.info(`Send Notification Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`Send PriceChange Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendNotificationToChannel(channelName, title, body)
     }
 
@@ -123,7 +124,7 @@ class PriceChangeAnalysisService {
             'loc-args': args
         };
 
-        this.logger.info(`Send Notification Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`Send PriceChange Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
         this.logger.info(`Response status: ${status}`)
 

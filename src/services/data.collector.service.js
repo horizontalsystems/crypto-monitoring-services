@@ -18,6 +18,10 @@ class DataCollectorService {
     async getDailyOpeningXRates(supportedCoinCodes, baseCurrency) {
         return this.xratesProvider.getXRates(supportedCoinCodes, baseCurrency)
     }
+
+    async getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp) {
+        return this.xratesProvider.getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp)
+    }
 }
 
 export default DataCollectorService

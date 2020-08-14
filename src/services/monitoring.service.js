@@ -46,7 +46,7 @@ class MonitoringService {
     async startAnalysisServices() {
         await new Promise(r => setTimeout(r, 2500));
 
-        this.priceChangeAnalysisService.start()
+        // this.priceChangeAnalysisService.start()
         this.trendingAnalysisService.start()
     }
 }

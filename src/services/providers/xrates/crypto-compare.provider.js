@@ -33,6 +33,30 @@ class CryptoCompareProvider {
         return CryptoCompareProvider.convertPriceResponse(await Promise.all(results))
     }
 
+    async getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp) {
+        const options = {
+            toTs: toTimestamp,
+            aggregate,
+            limit
+        }
+
+        const result = await this.ccApi.histoHour(coinCode, fiatCode, options)
+        return CryptoCompareProvider.convertHistoPriceResponse(coinCode, fiatCode, result)
+    }
+
+    static convertHistoPriceResponse(coinCode, fiatCode, result) {
+        if (result) {
+            const xrates = []
+            result.forEach(element => {
+                const xrate = new XRate(coinCode, fiatCode, element.close, element.time)
+                xrates.push(xrate)
+            })
+
+            return xrates;
+        }
+        return []
+    }
+
     static convertPriceResponse(result) {
         if (result) {
             const xRates = Object.entries(result).map(
