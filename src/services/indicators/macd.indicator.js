@@ -1,4 +1,6 @@
 /* eslint-disable class-methods-use-this */
+import Trend from '../../models/trend'
+
 const { MACD } = require('technicalindicators');
 
 const MACD_FAST_PERIOD = 12;
@@ -21,6 +23,26 @@ class MacdIndicator {
         };
 
         return MACD.calculate(macdInput);
+    }
+
+    calculateTrend(values) {
+        const macdResults = this.calculate(values)
+        // this.logger.info(`MACD Results: ${macdResults}`)
+
+        if (macdResults && macdResults.length > 0) {
+            const lastValue = macdResults.slice(-1)
+
+            if (lastValue[0]) {
+                if (lastValue[0].histogram > 0) {
+                    return Trend.UP
+                }
+                if (lastValue[0].histogram < 0) {
+                    return Trend.DOWN
+                }
+            }
+        }
+
+        return Trend.NEUTRAL
     }
 }
 
