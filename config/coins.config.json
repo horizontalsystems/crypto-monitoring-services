@@ -297,12 +297,6 @@
             "type": "CoinType.Erc20"
         },
         {
-            "id": "NDX",
-            "title": "Newdex",
-            "code": "NDX",
-            "type": "CoinType.Eos"
-        },
-        {
             "id": "NUT",
             "title": "Native Utility Token",
             "code": "NUT",
