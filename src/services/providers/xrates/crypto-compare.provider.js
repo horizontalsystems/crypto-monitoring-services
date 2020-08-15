@@ -1,5 +1,6 @@
 import cryptoCompareApi from 'cryptocompare'
 import XRate from '../../../models/xrate.model'
+import TimePeriod from '../../../models/time.period.model'
 
 global.fetch = require('node-fetch')
 
@@ -33,14 +34,23 @@ class CryptoCompareProvider {
         return CryptoCompareProvider.convertPriceResponse(await Promise.all(results))
     }
 
-    async getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp) {
+    async getHistoricalXRates(coinCode, fiatCode, timePeriod, aggregate, limit, toTimestamp) {
+        let histoMethod;
         const options = {
             toTs: toTimestamp,
             aggregate,
             limit
         }
 
-        const result = await this.ccApi.histoHour(coinCode, fiatCode, options)
+        if (timePeriod === TimePeriod.HOUR) {
+            histoMethod = this.ccApi.histoHour
+        } else if (timePeriod === TimePeriod.DAY) {
+            histoMethod = this.ccApi.histoDay
+        } else {
+            histoMethod = this.ccApi.histoMinute
+        }
+
+        const result = await histoMethod(coinCode, fiatCode, options)
         return CryptoCompareProvider.convertHistoPriceResponse(coinCode, fiatCode, result)
     }
 

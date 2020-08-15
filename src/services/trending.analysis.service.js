@@ -7,12 +7,12 @@ import cronТrend from 'node-cron';
 import MacdIndicator from './indicators/macd.indicator';
 import EmaIndicator from './indicators/ema.indicator';
 import RsiIndicator from './indicators/rsi.indicator';
-import Trend from '../models/trend';
-import TrendTerm from '../models/trend.term';
-import TrendState from '../models/trend.state';
+import Trend from '../models/trend.model';
+import TrendTerm from '../models/trend.term.model';
+import TrendState from '../models/trend.state.state';
 import Utils from '../utils/utils'
 
-// const CRON_DAILY_12AM = '0 0 0 * * *' // every day at 12:00 AM
+const CRON_DAILY_12AM = '0 10 0 * * *' // every day at 12:10 AM
 const CRON_EVERY_4H = '0 0 */4 * * *' // every 4 hours
 
 const EMOJI_GRAPH_UP = '\u{1F4C8}'
@@ -40,28 +40,31 @@ class TrendingAnalysisService {
         this.macdIndicator = new MacdIndicator(this.logger, this.data)
     }
 
-    start() {
-        // cronТrend.schedule(CRON_DAILY_12AM, () => {
-        //     this.getDailyOpeningXRates()
-        // });
+    async start() {
+        cronТrend.schedule(CRON_DAILY_12AM, () => {
+            this.checkTrendingChanges(this.TREND_LONG_TERM)
+        });
 
         cronТrend.schedule(CRON_EVERY_4H, () => {
             this.checkTrendingChanges(this.TREND_SHORT_TERM)
         });
 
-        this.checkTrendingChanges(this.TREND_SHORT_TERM)
+        await this.checkTrendingChanges(this.TREND_SHORT_TERM)
+        this.checkTrendingChanges(this.TREND_LONG_TERM)
     }
 
     async checkTrendingChanges(trendTerm) {
-        this.logger.info(`[TrendChange] Started checking TrendingChanges" with Term:${trendTerm.trendState}`)
+        this.logger.info(`{TrendChange} Started checking TrendingChanges" with Term:${trendTerm.trendState}`)
 
         const currentTime = Math.floor(new Date() / 1000)
 
         for (const coin of this.supportedCoins) {
-            const result = await this.dataCollectorService.getHourlyHistoXRates(
-                coin.code, this.baseCurrency,
+            const result = await this.dataCollectorService.getHistoricalXRates(
+                coin.code,
+                this.baseCurrency,
+                trendTerm.timePeriod,
                 trendTerm.aggregate,
-                trendTerm.period,
+                trendTerm.candleCount,
                 currentTime
             )
 
@@ -77,7 +80,7 @@ class TrendingAnalysisService {
                 const foundTrendData = this.previousTrendResults[foundIndex]
 
                 if (foundTrendData.trend !== latestTrendData.trend && trend !== Trend.NEUTRAL) {
-                    this.logger.info(`[TrendChange] Coin: ${coin.code}, Term:${trendTerm.trendState} Prev Trend:${foundTrendData.trend}, Latest Trend:${trend}`)
+                    this.logger.info(`{TrendChange} Coin: ${coin.code}, Term:${trendTerm.trendState}, Prev-Trend:${foundTrendData.trend}, Latest-Trend:${trend}`)
                     this.sendTrendChangeDataMessage(coin.code, trendTerm.trendState, trend)
                 }
                 this.previousTrendResults[foundIndex] = latestTrendData
@@ -118,7 +121,7 @@ class TrendingAnalysisService {
         const trendDirection = trend.toLowerCase()
         const body = `${coinCode}_trend_${trendState}term_${trendDirection}`
 
-        this.logger.info(`[TrendChange] Send TrendChange Notif:  Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange}  Send TrendChange Notif:  Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
         this.messagingProvider.sendNotificationToChannel(channelName, coinFound.title, body)
     }
 
@@ -134,9 +137,8 @@ class TrendingAnalysisService {
             'loc-args': args
         };
 
-        this.logger.info(`[TrendChange] Send Notif: Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange}  Send Notif: Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
-        this.logger.info(`[TrendChange] Response status: ${status}`)
 
         return status
     }

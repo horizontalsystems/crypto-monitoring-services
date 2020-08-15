@@ -23,11 +23,12 @@ class XRatesProvider {
         return {}
     }
 
-    async getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp) {
+    async getHistoricalXRates(coinCode, fiatCode, timePeriod, aggregate, limit, toTimestamp) {
         try {
-            const result = await this.defaultProvider.getHourlyHistoXRates(
+            const result = await this.defaultProvider.getHistoricalXRates(
                 coinCode,
                 fiatCode,
+                timePeriod,
                 aggregate,
                 limit,
                 toTimestamp

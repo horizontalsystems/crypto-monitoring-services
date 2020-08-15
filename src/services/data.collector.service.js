@@ -19,8 +19,8 @@ class DataCollectorService {
         return this.xratesProvider.getXRates(supportedCoinCodes, baseCurrency)
     }
 
-    async getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp) {
-        return this.xratesProvider.getHourlyHistoXRates(coinCode, fiatCode, aggregate, limit, toTimestamp)
+    async getHistoricalXRates(coinCode, fiatCode, timePeriod, aggregate, limit, toTimestamp) {
+        return this.xratesProvider.getHistoricalXRates(coinCode, fiatCode, timePeriod, aggregate, limit, toTimestamp)
     }
 }
 
