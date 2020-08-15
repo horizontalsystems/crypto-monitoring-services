@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import Trend from '../../models/trend'
+import Trend from '../../models/trend.model'
 
 const { RSI } = require('technicalindicators');
 
