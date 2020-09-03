@@ -267,6 +267,12 @@
             "type": "CoinType.Erc20"
         },
         {
+            "id": "LEND",
+            "title": "Aave",
+            "code": "LEND",
+            "type": "CoinType.Erc20"
+        },
+        {
             "id": "LOOM",
             "title": "Loom Network",
             "code": "LOOM",
