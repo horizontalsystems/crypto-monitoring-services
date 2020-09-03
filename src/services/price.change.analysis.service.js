@@ -51,9 +51,10 @@ class PriceChangeAnalysisService {
             this.supportedCoinCodes,
             this.baseCurrency
         )
-
-        this.addAdditionalCoin('BNB-ERC20', 'BNB', this.dailyOpeningXRates)
-        this.logger.info('[PriceChange] Daily opening xrates" data collected')
+        if (this.dailyOpeningXRates) {
+            this.addAdditionalCoin('BNB-ERC20', 'BNB', this.dailyOpeningXRates)
+            this.logger.info('[PriceChange] Daily opening xrates" data collected')
+        }
     }
 
     async checkXRateChanges(period) {
@@ -62,10 +63,10 @@ class PriceChangeAnalysisService {
             this.baseCurrency
         )
 
-        this.addAdditionalCoin('BNB-ERC20', 'BNB', latestXRates)
-        this.logger.info(`[PriceChange] Checking ${period} price changes.`)
-
         if (this.dailyOpeningXRates && latestXRates) {
+            this.addAdditionalCoin('BNB-ERC20', 'BNB', latestXRates)
+            this.logger.info(`[PriceChange] Checking ${period} price changes.`)
+
             Object.values(this.dailyOpeningXRates).forEach(dailyOpeningXRate => {
                 const latestXRate = latestXRates.find(xrate => xrate.coinId === dailyOpeningXRate.coinId)
                 if (latestXRate) {

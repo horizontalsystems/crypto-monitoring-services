@@ -17,7 +17,7 @@ class XRatesProvider {
                 return result
             }
         } catch (e) {
-            this.logger.info(e)
+            this.logger.error(`Error getting XRate coinCode:${coinCode}: ${e}`)
         }
 
         return {}
@@ -38,7 +38,7 @@ class XRatesProvider {
                 return result
             }
         } catch (e) {
-            this.logger.info(e)
+            this.logger.error(`Error getting HistoRates coinCode:${coinCode}: ${e}`)
         }
 
         return {}
@@ -52,7 +52,7 @@ class XRatesProvider {
                 return result
             }
         } catch (e) {
-            this.logger.info(e)
+            this.logger.error(`Error getting XRates coinCodes: ${coinCodes}: ${e}`)
         }
 
         return {}

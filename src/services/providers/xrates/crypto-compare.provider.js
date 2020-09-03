@@ -70,12 +70,12 @@ class CryptoCompareProvider {
         if (result) {
             const xRates = Object.entries(result).map(
                 resultData => {
-                    const asdf = Object.entries(resultData[1]).map(
+                    const ents = Object.entries(resultData[1]).map(
                         coinData => Object.entries(coinData[1]).map(
                             fiatData => new XRate(coinData[0], coinData[0], fiatData[0], fiatData[1])
                         )
                     )
-                    return [].concat(...asdf)
+                    return [].concat(...ents)
                 }
             )
 

@@ -119,7 +119,7 @@ class TrendingAnalysisService {
         const trendDirection = trend.toLowerCase()
         const body = `${coinId}_trend_${trendState}term_${trendDirection}`
 
-        this.logger.info(`{TrendChange}  Send Notif:  Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange} Send Notif:  Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
         this.messagingProvider.sendNotificationToChannel(channelName, coinFound.title, body)
     }
 
@@ -135,7 +135,7 @@ class TrendingAnalysisService {
             'loc-args': args
         };
 
-        this.logger.info(`{TrendChange}  Send Notif: Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange} Send Notif: Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
 
         return status
