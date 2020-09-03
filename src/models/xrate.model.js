@@ -1,5 +1,6 @@
 class XRate {
-    constructor(coinCode, fiatCode, rate, timestamp) {
+    constructor(coinId, coinCode, fiatCode, rate, timestamp) {
+        this.coinId = coinId
         this.coinCode = coinCode
         this.fiatCode = fiatCode
         this.rate = rate

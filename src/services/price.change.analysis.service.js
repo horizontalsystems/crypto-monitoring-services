@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import cron from 'node-cron';
+import XRate from '../models/xrate.model';
 
 const CRON_DAILY_12AM = '0 5 0 * * *' // every day at 12:05 AM
 const CRON_EVERY_20M = '0 */20 * * * *' // every 20 minutes
@@ -37,11 +38,21 @@ class PriceChangeAnalysisService {
         });
     }
 
+    addAdditionalCoin(coinId, coinCode, xrates) {
+        const xrate = xrates.find(e => e.coinCode === coinCode)
+        if (xrate) {
+            xrates.push(new XRate(coinId, coinCode, this.baseCurrency, xrate.rate))
+        }
+    }
+
     async getDailyOpeningXRates() {
+        this.dailyOpeningXRates = []
         this.dailyOpeningXRates = await this.dataCollectorService.getDailyOpeningXRates(
             this.supportedCoinCodes,
             this.baseCurrency
         )
+
+        this.addAdditionalCoin('BNB-ERC20', 'BNB', this.dailyOpeningXRates)
         this.logger.info('[PriceChange] Daily opening xrates" data collected')
     }
 
@@ -51,24 +62,25 @@ class PriceChangeAnalysisService {
             this.baseCurrency
         )
 
+        this.addAdditionalCoin('BNB-ERC20', 'BNB', latestXRates)
         this.logger.info(`[PriceChange] Checking ${period} price changes.`)
 
         if (this.dailyOpeningXRates && latestXRates) {
             Object.values(this.dailyOpeningXRates).forEach(dailyOpeningXRate => {
-                const latestXRate = latestXRates.find(xrate => xrate[0].coinCode === dailyOpeningXRate[0].coinCode)
+                const latestXRate = latestXRates.find(xrate => xrate.coinId === dailyOpeningXRate.coinId)
                 if (latestXRate) {
                     const changePercentage = PriceChangeAnalysisService.calculateXRateChangePercentage(
-                        dailyOpeningXRate[0].rate,
-                        latestXRate[0].rate
+                        dailyOpeningXRate.rate,
+                        latestXRate.rate
                     )
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
-                        if (percentage <= Math.abs(changePercentage)) {
-                            this.logger.info(`[PriceChange] Coin: ${dailyOpeningXRate[0].coinCode}, Opening rate:${dailyOpeningXRate[0].rate}, Latest Rate:${latestXRate[0].rate}`)
+                        if (percentage >= Math.abs(changePercentage)) {
+                            this.logger.info(`[PriceChange] Coin: ${dailyOpeningXRate.coinId}, Opening rate:${dailyOpeningXRate.rate}, Latest Rate:${latestXRate.rate}`)
 
-                            if (!this.isNotificationAlreadySent(dailyOpeningXRate[0].coinCode, percentage)) {
+                            if (!this.isNotificationAlreadySent(dailyOpeningXRate.coinId, percentage)) {
                                 this.sendXRateChangeDataMessage(
-                                    dailyOpeningXRate[0].coinCode,
+                                    dailyOpeningXRate.coinId,
                                     period,
                                     percentage,
                                     changePercentage
@@ -83,52 +95,52 @@ class PriceChangeAnalysisService {
 
     static calculateXRateChangePercentage(rateSource, rateTarget) {
         const diff = rateTarget - rateSource
-        const changePercentage = parseFloat((diff * 100) / rateSource)
+        const changePercentage = (diff * 100) / rateSource
 
         return Math.round(changePercentage * 10) / 10
     }
 
-    isNotificationAlreadySent(coinCode, changePercentage) {
+    isNotificationAlreadySent(coinId, changePercentage) {
         const notified = this.sentNotifications.find(
-            notifData => coinCode === notifData.coinCode && notifData.changePercentage === changePercentage
+            notifData => coinId === notifData.coinId && notifData.changePercentage === changePercentage
         )
 
         if (notified) {
-            this.logger.info(`[PriceChange] CoinCode:${coinCode}, for change%:${changePercentage} already notified`)
+            this.logger.info(`[PriceChange] Coin:${coinId}, for change%:${changePercentage} already notified`)
             return true
         }
 
-        this.sentNotifications.push({ coinCode, changePercentage })
+        this.sentNotifications.push({ coinId, changePercentage })
 
         return false
     }
 
-    async sendXRateChangeNotification(coinCode, alertPercentage, changePercentage) {
-        const channelName = `${coinCode}_24hour_${alertPercentage}percent`
-        const title = coinCode
+    async sendXRateChangeNotification(coinId, alertPercentage, changePercentage) {
+        const channelName = `${coinId}_24hour_${alertPercentage}percent`
+        const title = coinId
         const body = changePercentage
 
-        this.logger.info(`[PriceChange] Send Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`[PriceChange] Send Notif: Coin:${coinId}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         this.messagingProvider.sendNotificationToChannel(channelName, title, body)
     }
 
-    async sendXRateChangeDataMessage(coinCode, change, alertPercentage, changePercentage) {
-        const channelName = `${coinCode}_24hour_${alertPercentage}percent`
-        const coinFound = this.supportedCoins.find(coin => coin.code === coinCode)
+    async sendXRateChangeDataMessage(coinId, change, alertPercentage, changePercentage) {
+        const channelName = `${coinId}_24hour_${alertPercentage}percent`
+        const coinFound = this.supportedCoins.find(coin => coin.id === coinId)
         const emojiCode = changePercentage > 0 ? EMOJI_ARROW_UP : EMOJI_ARROW_DOWN
         const changeDirection = changePercentage > 0 ? 'up' : 'down'
-        const args = [coinCode, changePercentage, emojiCode]
+        const args = [coinFound.code, changePercentage.toString(), emojiCode]
         const data = {
             'title-loc-key': coinFound.title,
             'loc-key': `${change}_${changeDirection}`,
             'loc-args': args
         };
 
-        this.logger.info(`[PriceChange] Send Notif: Coin:${coinCode}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
+        this.logger.info(`[PriceChange] Send Notif: Coin:${coinId}, Alert %:${alertPercentage}, Change %:${changePercentage}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
         this.logger.info(`[PriceChange] Response status: ${status}`)
 
-        return status
+        return 0
     }
 }
 

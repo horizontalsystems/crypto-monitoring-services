@@ -24,7 +24,6 @@ class TrendingAnalysisService {
         this.appConfig = appConfig;
         this.coinsConfig = coinsConfig;
         this.supportedCoins = coinsConfig.coins
-        this.supportedCoinCodes = this.supportedCoins.map(coin => coin.code)
         this.baseCurrency = coinsConfig.base_currency
 
         this.previousTrendResults = []
@@ -69,10 +68,9 @@ class TrendingAnalysisService {
             )
 
             const trend = this.calculateTrend(result)
-            const latestTrendData = { coinCode: coin.code, term: trendTerm.trendState, trend }
-
+            const latestTrendData = { coinId: coin.id, term: trendTerm.trendState, trend }
             const foundIndex = this.previousTrendResults.findIndex(
-                data => data.coinCode === latestTrendData.coinCode
+                data => data.coinId === latestTrendData.coinId
                 && data.term === latestTrendData.term
             )
 
@@ -80,8 +78,8 @@ class TrendingAnalysisService {
                 const foundTrendData = this.previousTrendResults[foundIndex]
 
                 if (foundTrendData.trend !== latestTrendData.trend && trend !== Trend.NEUTRAL) {
-                    this.logger.info(`{TrendChange} Coin: ${coin.code}, Term:${trendTerm.trendState}, Prev-Trend:${foundTrendData.trend}, Latest-Trend:${trend}`)
-                    this.sendTrendChangeDataMessage(coin.code, trendTerm.trendState, trend)
+                    this.logger.info(`{TrendChange} Coin: ${coin.id}, Term:${trendTerm.trendState}, Prev-Trend:${foundTrendData.trend}, Latest-Trend:${trend}`)
+                    this.sendTrendChangeDataMessage(coin.id, trendTerm.trendState, trend)
                 }
                 this.previousTrendResults[foundIndex] = latestTrendData
             } else {
@@ -115,29 +113,29 @@ class TrendingAnalysisService {
         return Trend.NEUTRAL
     }
 
-    async sendTrendChangeNotification(coinCode, trendState, trend) {
-        const channelName = `${coinCode}_${trendState}term_trend_change`
-        const coinFound = this.supportedCoins.find(coin => coin.code === coinCode)
+    async sendTrendChangeNotification(coinId, trendState, trend) {
+        const channelName = `${coinId}_${trendState}term_trend_change`
+        const coinFound = this.supportedCoins.find(coin => coin.id === coinId)
         const trendDirection = trend.toLowerCase()
-        const body = `${coinCode}_trend_${trendState}term_${trendDirection}`
+        const body = `${coinId}_trend_${trendState}term_${trendDirection}`
 
-        this.logger.info(`{TrendChange}  Send TrendChange Notif:  Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange}  Send Notif:  Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
         this.messagingProvider.sendNotificationToChannel(channelName, coinFound.title, body)
     }
 
-    async sendTrendChangeDataMessage(coinCode, trendState, trend) {
-        const channelName = `${coinCode}_${trendState}term_trend_change`
-        const coinFound = this.supportedCoins.find(coin => coin.code === coinCode)
+    async sendTrendChangeDataMessage(coinId, trendState, trend) {
+        const channelName = `${coinId}_${trendState}term_trend_change`
+        const coinFound = this.supportedCoins.find(coin => coin.id === coinId)
         const emojiCode = trend === Trend.UP ? EMOJI_GRAPH_UP : EMOJI_GRAPH_DOWN
         const trendDirection = trend.toLowerCase()
-        const args = [coinCode, emojiCode]
+        const args = [coinFound.code, emojiCode]
         const data = {
             'title-loc-key': coinFound.title,
             'loc-key': `trend_${trendState}term_${trendDirection}`,
             'loc-args': args
         };
 
-        this.logger.info(`{TrendChange}  Send Notif: Coin:${coinCode}, State:${trendState}, Trend:${trendDirection}`)
+        this.logger.info(`{TrendChange}  Send Notif: Coin:${coinId}, State:${trendState}, Trend:${trendDirection}`)
         const status = await this.messagingProvider.sendDataMessageToChannel(channelName, data)
 
         return status
