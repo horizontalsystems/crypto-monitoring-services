@@ -57,6 +57,12 @@
             "type": "CoinType.Erc20"
         },
         {
+            "id": "AKRO",
+            "title": "Akropolis",
+            "code": "AKRO",
+            "type": "CoinType.Erc20"
+        },
+        {
             "id": "ANKR",
             "title": "Ankr Network",
             "code": "ANKR",
