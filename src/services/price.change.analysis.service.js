@@ -75,7 +75,7 @@ class PriceChangeAnalysisService {
                     )
 
                     Object.values(XRATES_CHANGE_PERCENTAGES).forEach(percentage => {
-                        if (percentage >= Math.abs(changePercentage)) {
+                        if (percentage <= Math.abs(changePercentage)) {
                             this.logger.info(`[PriceChange] Coin: ${dailyOpeningXRate.coinId}, Opening rate:${dailyOpeningXRate.rate}, Latest Rate:${latestXRate.rate}`)
 
                             if (!this.isNotificationAlreadySent(dailyOpeningXRate.coinId, percentage)) {
