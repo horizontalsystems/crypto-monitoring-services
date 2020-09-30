@@ -11,7 +11,7 @@ class TrendTerm {
             this.timePeriodValue = TimePeriod.HOUR
         } else if (trendState === TrendState.LONG) {
             this.aggregate = 1
-            this.candleCountValue = 90
+            this.candleCountValue = 50
             this.timePeriodValue = TimePeriod.DAY
         }
     }
