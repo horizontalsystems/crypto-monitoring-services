@@ -8,7 +8,10 @@ services:
             dockerfile: './docker/Dockerfile'
         ports:
             - '3000:3000'
+        volumes:
+            - cms-db-data:/data/cms/db/
         environment:
             - NODE_ENV=production
             - PORT=3000
-    
+volumes:
+      cms-db-data:

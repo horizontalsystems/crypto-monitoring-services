@@ -44,6 +44,10 @@ class MacdIndicator {
 
         return Trend.NEUTRAL
     }
+
+    getName() {
+        return 'MACD'
+    }
 }
 
 export default MacdIndicator;

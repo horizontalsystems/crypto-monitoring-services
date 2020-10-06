@@ -11,7 +11,7 @@ const EMOJI_ARROW_UP = '\u2B06'
 const EMOJI_ARROW_DOWN = '\u2B07'
 
 class PriceChangeAnalysisService {
-    constructor(logger, appConfig, coinsConfig, messagingProvider, dataCollectorService) {
+    constructor(logger, appConfig, coinsConfig, messagingProvider, dataCollectorService, storageService) {
         this.logger = logger;
         this.appConfig = appConfig;
         this.coinsConfig = coinsConfig;
@@ -21,6 +21,7 @@ class PriceChangeAnalysisService {
 
         this.messagingProvider = messagingProvider
         this.dataCollectorService = dataCollectorService
+        this.storageService = storageService
 
         this.sentNotifications = []
     }

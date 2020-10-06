@@ -38,6 +38,10 @@ class RsiIndicator {
 
         return Trend.NEUTRAL
     }
+
+    getName() {
+        return 'RSI'
+    }
 }
 
 export default RsiIndicator

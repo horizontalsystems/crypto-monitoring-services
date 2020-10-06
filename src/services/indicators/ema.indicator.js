@@ -42,6 +42,10 @@ class EmaIndicator {
 
         return Trend.NEUTRAL
     }
+
+    getName() {
+        return 'EMA'
+    }
 }
 
 export default EmaIndicator;

@@ -2,6 +2,7 @@ import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import Routes from '../routes'
 import logger from '../utils/logger.winston'
 import MonitoringService from '../services/monitoring.service';
 import AppConfig from '../../config/app.config.json';
@@ -30,6 +31,10 @@ class MonitoringServer {
         this.initMiddlewares();
     }
 
+    initRoutes(router) {
+        this.app.use(router);
+    }
+
     initMiddlewares() {
         this.app.use(morgan('combined', { stream: logger.stream }));
     }
@@ -39,6 +44,8 @@ class MonitoringServer {
         logger.info(`App started listening port:${this.port}`)
 
         const monitoringService = new MonitoringService(logger, appConfig, coinsConfig);
+        const routes = new Routes(monitoringService)
+        this.initRoutes(routes.getRouter())
         monitoringService.start()
         logger.info('Monitoring service started successfully')
     }

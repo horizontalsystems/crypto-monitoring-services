@@ -19,7 +19,7 @@ const EMOJI_GRAPH_UP = '\u{1F4C8}'
 const EMOJI_GRAPH_DOWN = '\u{1F4C9}'
 
 class TrendingAnalysisService {
-    constructor(logger, appConfig, coinsConfig, messagingProvider, dataCollectorService) {
+    constructor(logger, appConfig, coinsConfig, messagingProvider, dataCollectorService, storageService) {
         this.logger = logger;
         this.appConfig = appConfig;
         this.coinsConfig = coinsConfig;
@@ -30,6 +30,7 @@ class TrendingAnalysisService {
 
         this.messagingProvider = messagingProvider
         this.dataCollectorService = dataCollectorService
+        this.storageService = storageService
 
         this.TREND_SHORT_TERM = new TrendTerm(TrendState.SHORT)
         this.TREND_LONG_TERM = new TrendTerm(TrendState.LONG)
@@ -67,8 +68,9 @@ class TrendingAnalysisService {
                 currentTime
             )
 
-            const trend = this.calculateTrend(result)
-            const latestTrendData = { coinId: coin.id, term: trendTerm.trendState, trend }
+            const trendData = this.calculateTrend(result)
+            const trend = trendData.overallTrend
+            const latestTrendData = { coinId: coin.id, term: trendTerm.trendState, trendData }
             const foundIndex = this.previousTrendResults.findIndex(
                 data => data.coinId === latestTrendData.coinId
                 && data.term === latestTrendData.term
@@ -77,8 +79,19 @@ class TrendingAnalysisService {
             if (foundIndex !== -1) {
                 const foundTrendData = this.previousTrendResults[foundIndex]
 
-                if (foundTrendData.trend !== latestTrendData.trend && trend !== Trend.NEUTRAL) {
+                if (foundTrendData.trendData.overallTrend !== latestTrendData.trendData.overallTrend && trend !== Trend.NEUTRAL) {
                     this.logger.info(`{TrendChange} Coin: ${coin.id}, Term:${trendTerm.trendState}, Prev-Trend:${foundTrendData.trend}, Latest-Trend:${trend}`)
+
+                    // ----------- Store Trend Info -----------------
+                    this.storageService.saveTrendInfo(
+                        coin.id,
+                        Math.floor(Date.now() / 1000),
+                        trendTerm.trendState,
+                        foundTrendData.trendData,
+                        latestTrendData.trendData
+                    )
+                    // ----------------------------------------------
+
                     this.sendTrendChangeDataMessage(coin.id, trendTerm.trendState, trend)
                 }
                 this.previousTrendResults[foundIndex] = latestTrendData
@@ -93,24 +106,33 @@ class TrendingAnalysisService {
     }
 
     calculateTrend(result) {
+        let indicators
+
         if (result && result.length > 0) {
             const closeValues = result.map(e => e.rate)
 
             if (closeValues && closeValues.length > 0) {
-                const trends = [
-                    this.rsiIndicator.calculateTrend(closeValues),
-                    this.macdIndicator.calculateTrend(closeValues),
-                    this.emaIndicator.calculateTrend(closeValues)
-                ]
+                const rsiTrend = this.rsiIndicator.calculateTrend(closeValues)
+                const macdTrend = this.macdIndicator.calculateTrend(closeValues)
+                const emaTrend = this.emaIndicator.calculateTrend(closeValues)
 
-                const trend = Utils.getDublicateElements(trends)
+                indicators = [{
+                    Indicator: this.rsiIndicator.getName(),
+                    Trend: rsiTrend }, {
+                    Indicator: this.macdIndicator.getName(),
+                    Trend: macdTrend }, {
+                    Indicator: this.emaIndicator.getName(),
+                    Trend: emaTrend
+                }]
+
+                const trend = Utils.getDublicateElements([rsiTrend, macdTrend, emaTrend])
                 if (trend.length > 0) {
-                    return trend[0]
+                    return { indicators, overallTrend: trend[0] }
                 }
             }
         }
 
-        return Trend.NEUTRAL
+        return { indicators, overallTrend: Trend.NEUTRAL }
     }
 
     async sendTrendChangeNotification(coinId, trendState, trend) {
