@@ -1,5 +1,9 @@
 {
     "development": {
+        "db":{
+            "dialect": "sqlite",
+            "storage": "./data/cms/db/cms.db"
+        },
         "service_providers": {
             "push_notification_provider": {
                 "username": "admin",
@@ -12,6 +16,10 @@
         }
     },
     "test": {
+        "db":{
+            "dialect": "sqlite",
+            "storage": ":memory"
+        },
         "service_providers": {
             "push_notification_provider": {
                 "username": "admin",
@@ -24,6 +32,10 @@
         }
     },
     "production": {
+        "db":{
+            "dialect": "sqlite",
+            "storage": "/data/cms/db/cms.db"
+        },
         "service_providers": {
             "push_notification_provider": {
                 "username": "admin",
