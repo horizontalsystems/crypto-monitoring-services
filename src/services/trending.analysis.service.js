@@ -83,13 +83,13 @@ class TrendingAnalysisService {
                     this.logger.info(`{TrendChange} Coin: ${coin.id}, Term:${trendTerm.trendState}, Prev-Trend:${foundTrendData.trend}, Latest-Trend:${trend}`)
 
                     // ----------- Store Trend Info -----------------
-                    this.storageService.saveTrendInfo(
-                        coin.id,
-                        Math.floor(Date.now() / 1000),
-                        trendTerm.trendState,
-                        foundTrendData.trendData,
-                        latestTrendData.trendData
-                    )
+                    // this.storageService.saveTrendInfo(
+                    //     coin.id,
+                    //     Math.floor(Date.now() / 1000),
+                    //     trendTerm.trendState,
+                    //     foundTrendData.trendData,
+                    //     latestTrendData.trendData
+                    // )
                     // ----------------------------------------------
 
                     this.sendTrendChangeDataMessage(coin.id, trendTerm.trendState, trend)
